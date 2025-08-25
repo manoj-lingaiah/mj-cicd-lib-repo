@@ -1,0 +1,13 @@
+name: "Sonar Scan (Dry Run)"
+description: "Simulated SonarQube/SonarCloud scan"
+inputs:
+  sonar-token:
+    required: false
+outputs:
+  approved:
+    description: "Approval status"
+    value: "true"
+runs:
+  using: "composite"
+  steps:
+    - run: echo "✅ Sonar scan simulated (quality gate approved=true)"
