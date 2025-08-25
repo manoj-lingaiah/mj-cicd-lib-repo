@@ -1,0 +1,19 @@
+name: "AKS Deploy (Dry Run)"
+description: "Simulated Kubernetes deploy to AKS"
+inputs:
+  acr-name:
+    required: true
+  docker-image-name:
+    required: true
+  sha:
+    required: true
+  aks-name:
+    required: true
+  resource-group:
+    required: true
+  namespace:
+    default: "default"
+runs:
+  using: "composite"
+  steps:
+    - run: echo "✅ Simulated deploy of ${{ inputs.docker-image-name }}:${{ inputs.sha }} to AKS cluster ${{ inputs.aks-name }} in namespace ${{ inputs.namespace }}"
