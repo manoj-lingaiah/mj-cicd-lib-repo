@@ -1,0 +1,13 @@
+name: "Unit Tests (Dry Run)"
+description: "Simulated Java unit tests"
+inputs:
+  java-version:
+    required: true
+outputs:
+  pass_rate:
+    description: "Pass percentage"
+    value: "85"
+runs:
+  using: "composite"
+  steps:
+    - run: echo "✅ Unit tests simulated on Java ${{ inputs.java-version }} (pass rate=85%)"
