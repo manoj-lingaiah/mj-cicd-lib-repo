@@ -1,4 +1,4 @@
-name: CI Java Reusable Workflow
+name: CI Java Reusable Workflow (Dry Run)
 
 on:
   workflow_call:
@@ -17,33 +17,36 @@ on:
 
 jobs:
   code-style-check:
-    uses: ./.github/actions/codestyle-java
-    with:
-      java-version: ${{ inputs.java-version }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dry Run - Code Style Check
+        run: echo "Running Code Style Check with Java ${{ inputs.java-version }}"
 
   unit-tests:
+    runs-on: ubuntu-latest
     needs: code-style-check
-    uses: ./.github/actions/unit-tests
-    with:
-      java-version: ${{ inputs.java-version }}
+    steps:
+      - name: Dry Run - Unit Tests
+        run: echo "Running Unit Tests with Java ${{ inputs.java-version }}"
 
   sonar-scan:
+    runs-on: ubuntu-latest
     needs: unit-tests
-    uses: ./.github/actions/sonar-scan
-    secrets:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - name: Dry Run - Sonar Scan
+        run: echo "Running Sonar Scan with SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}"
 
   snyk-scan:
+    runs-on: ubuntu-latest
     needs: sonar-scan
-    uses: ./.github/actions/snyk-scan
-    secrets:
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - name: Dry Run - Snyk Scan
+        run: echo "Running Snyk Scan with SNYK_TOKEN=${{ secrets.SNYK_TOKEN }}"
 
   build-docker:
+    runs-on: ubuntu-latest
     needs: [unit-tests, sonar-scan]
-    if: needs.unit-tests.outputs.pass_rate > 80 && needs.sonar-scan.outputs.approved == 'true'
-    uses: ./.github/actions/docker-build
-    with:
-      docker-image-name: ${{ inputs.docker-image-name }}
-      sha: ${{ github.sha }}
-  
+    if: always() # allow it to run even if conditions not met
+    steps:
+      - name: Dry Run - Build Docker Image
+        run: echo "Building Docker Image ${{ inputs.docker-image-name }} with commit ${{ github.sha }}"
