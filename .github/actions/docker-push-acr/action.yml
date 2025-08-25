@@ -1,0 +1,13 @@
+name: "Docker Push to ACR (Dry Run)"
+description: "Simulated Docker push to Azure Container Registry"
+inputs:
+  acr-name:
+    required: true
+  docker-image-name:
+    required: true
+  sha:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: echo "✅ Simulated push of ${{ inputs.docker-image-name }}:${{ inputs.sha }} to ACR ${{ inputs.acr-name }}"
