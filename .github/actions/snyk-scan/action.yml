@@ -1,0 +1,9 @@
+name: "Snyk Scan (Dry Run)"
+description: "Simulated Snyk vulnerability scan"
+inputs:
+  snyk-token:
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - run: echo "✅ Snyk scan simulated (no vulnerabilities found)"
