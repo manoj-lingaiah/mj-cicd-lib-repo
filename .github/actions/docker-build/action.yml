@@ -1,0 +1,11 @@
+name: "Docker Build (Dry Run)"
+description: "Simulated Docker build"
+inputs:
+  docker-image-name:
+    required: true
+  sha:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: echo "✅ Simulated Docker build for ${{ inputs.docker-image-name }}:${{ inputs.sha }}"
