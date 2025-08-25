@@ -1,0 +1,40 @@
+name: CD Java Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      docker-image-name:
+        required: true
+        type: string
+      acr-name:
+        required: true
+        type: string
+      aks-name:
+        required: true
+        type: string
+      resource-group:
+        required: true
+        type: string
+      namespace:
+        required: false
+        default: "default"
+        type: string
+
+jobs:
+  push-to-acr:
+    uses: ./.github/actions/docker-push-acr
+    with:
+      acr-name: ${{ inputs.acr-name }}
+      docker-image-name: ${{ inputs.docker-image-name }}
+      sha: ${{ github.sha }}
+
+  deploy-to-aks:
+    needs: push-to-acr
+    uses: ./.github/actions/aks-deploy
+    with:
+      acr-name: ${{ inputs.acr-name }}
+      docker-image-name: ${{ inputs.docker-image-name }}
+      sha: ${{ github.sha }}
+      aks-name: ${{ inputs.aks-name }}
+      resource-group: ${{ inputs.resource-group }}
+      namespace: ${{ inputs.namespace }}
